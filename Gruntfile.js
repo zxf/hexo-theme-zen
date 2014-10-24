@@ -4,7 +4,8 @@ module.exports = function(grunt){
       dist: {
         src: [
           '_lib/jquery/dist/jquery.js',
-          '_lib/jquery-pjax/jquery.pjax.js'
+          '_lib/jquery-pjax/jquery.pjax.js',
+          '_src/js/ready.js'
         ],
         dest: '_dist/js/zen.js'
       }
@@ -18,6 +19,7 @@ module.exports = function(grunt){
     less: {
       dist: {
         src: [
+          '_src/css/zen.less'
         ],
         dest: '_dist/css/zen.css'
       }

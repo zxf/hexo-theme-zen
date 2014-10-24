@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "Simple hexo theme",
   "author": "zxf <zxfnnn@gmail.com>",
+  "repository": "git@github.com:zxf/hexo-theme-zen.git",
+  "home": "https://github.com/zxf/hexo-theme-zen",
   "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.2",
