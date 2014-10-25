@@ -1,7 +1,7 @@
 <ul>
   <% page.posts.each(function(item){ %>
     <li>
-      <a data-pjax href="<%- config.root %><%- item.path %>"><%= item.title %></a>
+      <a data-pjax href="<%- url_for(item.path) %>"><%= item.title %></a>
       <span> [ <%= date(item.date, null) %> ] </span>
     </li>
   <% }); %>

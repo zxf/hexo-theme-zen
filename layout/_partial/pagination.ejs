@@ -1,0 +1,18 @@
+<% if (page.prev || page.next){ %>
+  <div id="pagination" class="clearfix">
+    <div class="left">
+      ( <%- page.current %> / <%- page.total %> )
+    </div>
+    <div class="right">
+    <% if (page.prev){ %>
+      <a href="<%- url_for(page.prev_link) %>"><%= __('PREV') %></a>
+    <% } %>
+    <% if (page.prev && page.next){ %>
+      <span>&nbsp;|&nbsp;<span>
+    <% } %>
+    <% if (page.next){ %>
+      <a href="<%- url_for(page.next_link) %>"><%= __('NEXT') %></a>
+    <% } %>
+    </div>
+  </div>
+<% } %>

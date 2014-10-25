@@ -1,0 +1,36 @@
+<div class="tags">
+  <div class="underline tags-title"><%= __("Categories") %></div>
+  <% if (site.categories.length){ %>
+    <div>
+      <ul class="tag-list">
+      <% site.categories.sort('name').each(function(item){ %>
+        <li class="tag-list-item">
+          <a class="tag-list-link" href="<%- url_for(item.path) %>"><%= item.name %></a>
+        </li>
+      <% }) %>
+      </ul>
+    </div>
+  <% } %>
+</div>
+
+<div class="tags">
+  <div class="underline tags-title"><%= __("Tags") %></div>
+  <% if (site.tags.length){ %>
+    <div>
+    <%- list_tags(site.tags, {
+      show_count: false,
+      class: 'tag'
+    }) %>
+    </div>
+  <% } %>
+</div>
+
+<div class="tags">
+  <div class="underline tags-title"><%= __("Archives") %></div>
+    <div>
+    <%- list_archives({
+      show_count: false,
+      class: 'tag'
+    }) %>
+    </div>
+</div>

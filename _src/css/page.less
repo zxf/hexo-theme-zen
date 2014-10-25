@@ -6,12 +6,57 @@
 }
 #list {
   width: 750px;
+  .header {
+    position: relative;
+    .title {
+      padding:10px 150px 10px 0px;
+      font-size:28px;
+    }
+    #search {
+      position: absolute;
+      right: 0px;
+      bottom: 10px;
+      input {
+        box-sizing: border-box;
+        height: 25px;
+        width:100px;
+        border: 1px solid @grey;
+        border-right: 0px; 
+        color: @grey;
+        outline: none;
+        &:active{
+          border: 1px solid @grey;
+        }
+      }
+      button {
+        box-sizing: border-box;
+        height: 25px;
+        vertical-align: top;
+        cursor: pointer;
+        border-left: 1px solid @grey;
+        border-right: none;
+        border-top: none;
+        border-bottom: none;
+        outline: none;
+        background: @grey;
+        color: @white;
+        &:hover, &:active{
+          background-color: @lightgrey;
+          border-color: @lightgrey;
+        }
+      }
+    }
+  }
   li {
     margin:10px 0px;
   }
 }
+#pagination{
+  margin-bottom:20px;
+}
 #sidebar {
   width: 200px;
+  padding: 20px 0px;
 }
 
 
@@ -20,7 +65,56 @@
   .title {
     text-align: center;
     margin: 0px;
-    line-height: 80px;
+    line-height: 60px;
     font-size: 36px;
+    padding-top:20px;
+  }
+  time {
+    line-height: 20px;
+    padding: 0px 20px;
+  }
+  .footer {
+    padding: 20px;
+    a {
+      display: inline-block;
+      max-width: 100px
+    }
+  }
+}
+.tags{
+  padding: 20px;
+  > span {
+    display: inline-block;
+    vertical-align: top;
+    padding: 2px 0px;
+    margin:5px 0px;
+  }
+  .tags-title {
+    padding: 5px 0px;
+    margin-bottom: 5px;
+    font-size: 18px;
+  }
+}
+.tag-list{
+  light-height: 20px;
+  .nostyle();
+  .clearfix();
+  margin: 0px;
+  padding: 0px;
+  display: inline-block;
+  > li {
+    float: left;
+    margin: 5px 10px 5px 0px;
+    a {
+      text-decoration: none;
+      padding: 2px 5px;
+      background-color: @lightgrey;
+      color: @white;
+      display: inline-block;
+      &:hover {
+        color: @white;
+        background-color: @grey;
+      }
+    }
   }
 }
