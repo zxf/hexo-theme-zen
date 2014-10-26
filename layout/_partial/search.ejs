@@ -2,13 +2,13 @@
   <form id="search" action="//google.com/search" method="get" accept-charset="utf-8">
     <input type="hidden" name="q" value=""/>
     <input type="hidden" name="site" value="site:<%- config.url.replace(/^https?:\/\//, '') %>"/>
-    <input type="text" /><button type="submit"><%= __('search') %></button>
+    <input type="text" /><button type="submit"><%= __('SEARCH') %></button>
   </form>
 <% } %>
 <% if(theme.search == "baidu"){ %>
   <form id="search" action="//baidu.com/s" method="get" accept-charset="utf-8">
     <input type="hidden" name="wd" value=""/>
     <input type="hidden" name="site" value="site:<%- config.url.replace(/^https?:\/\//, '') %>"/>
-    <input type="text"/><button type="submit"><%= __('search') %></button>
+    <input type="text"/><button type="submit"><%= __('SEARCH') %></button>
   </form>
 <% } %>
