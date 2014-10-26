@@ -376,8 +376,10 @@ pre .javascript .function {
 }
 #list .header #search input:active {
   border: 1px solid #666666;
+  border-right: 0px;
 }
 #list .header #search button {
+  margin: 0px;
   box-sizing: border-box;
   height: 25px;
   vertical-align: top;
@@ -426,6 +428,16 @@ pre .javascript .function {
   display: inline-block;
   max-width: 100px;
 }
+#post .comment {
+  margin-top: 40px;
+}
+#post .share {
+  padding: 10px 40px;
+  text-align: right;
+}
+#post .share .right {
+  float: right;
+}
 .tags {
   padding: 20px;
 }
@@ -467,18 +479,18 @@ pre .javascript .function {
 .tag-list:after {
   clear: both;
 }
-.tag-list > li {
+.tag-list .tag-list-item {
   float: left;
   margin: 5px 10px 5px 0px;
 }
-.tag-list > li a {
+.tag-list .tag-list-item .tag-list-link {
   text-decoration: none;
   padding: 2px 5px;
   background-color: #999999;
   color: #ffffff;
   display: inline-block;
 }
-.tag-list > li a:hover {
+.tag-list .tag-list-item .tag-list-link:hover {
   color: #ffffff;
   background-color: #666666;
 }

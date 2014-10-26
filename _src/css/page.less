@@ -21,14 +21,16 @@
         height: 25px;
         width:100px;
         border: 1px solid @grey;
-        border-right: 0px; 
+        border-right: 0px;
         color: @grey;
         outline: none;
         &:active{
           border: 1px solid @grey;
+          border-right: 0px;
         }
       }
       button {
+        margin:0px;
         box-sizing: border-box;
         height: 25px;
         vertical-align: top;
@@ -80,6 +82,16 @@
       max-width: 100px
     }
   }
+  .comment {
+    margin-top: 40px;
+  }
+  .share {
+    padding:10px 40px;
+    text-align: right;
+    .right {
+        float: right;
+    }
+  }
 }
 .tags{
   padding: 20px;
@@ -102,10 +114,10 @@
   margin: 0px;
   padding: 0px;
   display: inline-block;
-  > li {
+  .tag-list-item {
     float: left;
     margin: 5px 10px 5px 0px;
-    a {
+    .tag-list-link {
       text-decoration: none;
       padding: 2px 5px;
       background-color: @lightgrey;

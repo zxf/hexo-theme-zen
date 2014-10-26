@@ -1,0 +1,9 @@
+<% if (page.tags && page.tags.length){ %>
+  <div class="tags">
+    <span><%= __("Tags") %>:</span>
+    <%- list_tags(page.tags, {
+      show_count: false,
+      class: 'tag'
+    }) %>
+  </div>
+<% } %>

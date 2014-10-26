@@ -1,0 +1,17 @@
+<div class="clearfix" >
+  <div class="text-center">
+    <% if (page.prev){ %>
+      <a href="<%- url_for(page.prev.path) %>" class="" tooltip="<%= page.prev.title || __("no title") %>">
+        <%= page.prev.title || __("no title") %>
+      </a>
+    <% } %>
+    <span>&nbsp;|&nbsp;</span>
+    <a href="<%- config.root %>"><%= __("HOME") %></a>
+    <span>&nbsp;|&nbsp;</span>
+    <% if (page.next){ %>
+      <a href="<%- url_for(page.next.path) %>" class="" tooltip="<%= page.next.title || __("no title") %>">
+        <%= page.next.title || __("no title") %>
+      </a>
+    <% } %>
+  </div>
+</div>

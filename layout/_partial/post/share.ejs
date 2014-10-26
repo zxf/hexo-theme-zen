@@ -1,0 +1,13 @@
+<% if (theme.share == "baidu"){ %>
+  <div class="share">
+    <div class="bdsharebuttonbox">
+      <a href="#" class="bds_more right" data-cmd="more"><%= __("share") %></a>
+    </div>
+  </div>
+<% } else if (theme.share == "addthis") { %>
+  <div class="share">
+    <div class="addthis addthis_toolbox addthis_default_style">
+      <a class="addthis_counter addthis_pill_style right"></a>
+    </div>
+  </div>
+<% } %>

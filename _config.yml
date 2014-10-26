@@ -1,1 +1,26 @@
+#Hexo theme zen
+## Source: https://github.com/zxf/hexo-theme-zen
+
+#Search engine
 search: baidu
+
+#Sidebar
+sidebar:
+- categories
+- tags
+- archives
+#- links
+
+#Links
+links:
+  #hexo: http://hexo.io/
+
+#Comments duoshuo|disqus
+comment: disqus
+
+#Share baidu|addthis
+share: addthis
+
+#Addthis info
+addthis:
+  pubid:

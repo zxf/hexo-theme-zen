@@ -1,0 +1,14 @@
+<div id="post">
+  <%- partial('post/title') %>
+  <div class="underline">
+    <div class="article-entry">
+      <%- page.content %>
+    </div>
+    <%- partial('post/tags') %>
+    <%- partial('post/share') %>
+  </div>
+  <div class="footer">
+    <%- partial('post/nav') %>
+    <%- partial('post/comments') %>
+  </div>
+</div>
