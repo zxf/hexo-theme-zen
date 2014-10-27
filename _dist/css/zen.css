@@ -346,7 +346,7 @@ pre .javascript .function {
 }
 #header {
   width: 1020px;
-  margin: 0px auto 20px auto;
+  margin: 0px auto 10px;
 }
 #header .logo {
   position: relative;
@@ -368,7 +368,7 @@ pre .javascript .function {
   text-align: center;
   min-width: 80px;
   padding: 5px;
-  padding-right: 40px;
+  padding-right: 50px;
   font-weight: bold;
 }
 #header .logo .logo-calendar {
@@ -377,7 +377,12 @@ pre .javascript .function {
   top: 10px;
   background: red;
   height: 20px;
+  line-height: 20px;
+  font-size: 10px;
+  text-align: center;
   width: 40px;
+  display: inline-block;
+  color: #ffffff;
 }
 #main {
   border: 1px solid #000000;
