@@ -5,8 +5,10 @@ module.exports = function(grunt){
         src: [
           '_lib/jquery/dist/jquery.js',
           '_lib/jquery-pjax/jquery.pjax.js',
-          '_src/js/ready.js',
-          '_src/js/search.js'
+          '_src/js/base.js',
+          '_src/js/calendar.js',
+          '_src/js/ana.js',
+          '_src/js/ready.js'
         ],
         dest: '_dist/js/zen.js'
       }

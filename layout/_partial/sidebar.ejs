@@ -8,36 +8,39 @@
               <ul class="tag-list">
               <% site.categories.sort('name').each(function(item){ %>
                 <li class="tag-list-item">
-                  <a class="tag-list-link" href="<%- url_for(item.path) %>"><%= item.name %></a>
+                  <a data-pjax class="tag-list-link" href="<%- url_for(item.path) %>"><%= item.name %></a>
                 </li>
               <% }) %>
               </ul>
             </div>
           <% } %>
         </div>
-       <% } else if(widget == "tags"){ %>
+      <% } else if(widget == "tags"){ %>
         <div class="tags">
           <div class="underline tags-title"><%= __("Tags") %></div>
           <% if (site.tags.length){ %>
             <div>
-            <%- list_tags(site.tags, {
-              show_count: false,
-              class: 'tag'
-            }) %>
+              <ul class="tag-list">
+                <% site.tags.sort('name').each(function(item){ %>
+                  <li class="tag-list-item">
+                    <a data-pjax class="tag-list-link" href="<%- url_for(item.path) %>"><%= item.name %></a>
+                  </li>
+                <% }) %>
+              </ul>
             </div>
           <% } %>
         </div>
-       <% } else if(widget == "archives"){ %>
+      <% } else if(widget == "archives"){ %>
         <div class="tags">
           <div class="underline tags-title"><%= __("Archives") %></div>
-            <div>
+            <div data-pjax>
             <%- list_archives({
               show_count: false,
               class: 'tag'
             }) %>
             </div>
         </div>
-       <% } else if(widget == "links"){ %>
+      <% } else if(widget == "links"){ %>
         <div class="tags">
           <div class="underline tags-title"><%= __("Links") %></div>
             <div>
@@ -50,6 +53,32 @@
               </ul>
             </div>
         </div>
-       <% } %>
+      <% } else if(widget == "projects"){ %>
+        <div class="tags">
+          <div class="underline tags-title"><%= __("Projects") %></div>
+            <div>
+              <ul class="tag-list">
+              <% for (var project in theme.projects){ %>
+                <li>
+                  <a href="<%= theme.projects[project] %>"><%= project %></a>
+                </li>
+              <% } %>
+              </ul>
+            </div>
+        </div>
+      <% } else if(widget == "recents"){ %>
+        <div class="tags">
+          <div class="underline tags-title"><%= __("Recents") %></div>
+            <div>
+              <ul class="tag-list">
+              <% site.posts.sort('date', -1).limit(3).each(function(post){ %>
+                <li>
+                  <a data-pjax href="<%- url_for(post.path) %>"><%= post.title %></a>
+                </li>
+              <% }); %>
+              </ul>
+            </div>
+        </div>
+      <% } %>
    <% }) %>
 <% } %>

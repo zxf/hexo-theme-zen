@@ -1,6 +1,36 @@
 #Hexo theme zen
 ## Source: https://github.com/zxf/hexo-theme-zen
 
+#Header
+header:
+  #set image and word
+  logo:
+    widgets:
+      #- image
+      - word
+      - calendar
+    spring:
+      color:
+      content: 
+      word:
+      image:
+    summer:
+      color:
+      content: 
+      word:
+      image:
+    autumn:
+      color:
+      content: 
+      word:
+      image:
+    winter:
+      color:
+      content: 
+      word:
+      image:
+    calendar: lunar
+
 #Search engine
 search: baidu
 
@@ -10,9 +40,14 @@ sidebar:
 - tags
 - archives
 #- links
+#- projects
 
 #Links
 links:
+  #hexo: http://hexo.io/
+
+#Projects
+projects:
   #hexo: http://hexo.io/
 
 #Comments duoshuo|disqus
@@ -23,4 +58,4 @@ share: addthis
 
 #Addthis info
 addthis:
-  pubid:
+  pubid: 

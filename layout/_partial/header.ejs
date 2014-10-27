@@ -1,0 +1,22 @@
+<% if(theme.header.logo) { %>
+<header id="header">
+  <div class="clearfix">
+    <div class="logo left">
+      <a data-pjax href="<%- config.root %>">
+        <% if(theme.header.logo.widgets) { %>
+          <% theme.header.logo.widgets.forEach(function(widget){ %>
+            <% if (widget == "image") { %>
+              <img class="logo-image" />
+            <% } else if (widget == "word") { %>
+              <span class="logo-word">禾</span>
+            <% } else if (widget == "calendar") { %>
+              <span class="logo-calendar"></span>
+            <% } %>
+          <% }) %>
+        <% } %>
+      </a>
+    </div>
+    <div class="ana right"></div>
+  </div>
+</header>
+<% } %>

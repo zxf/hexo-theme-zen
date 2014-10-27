@@ -10051,7 +10051,7 @@ $.support.pjax ? enable() : disable()
 })(jQuery);
 
 $(function(){
-  $(document).pjax('a[data-pjax]', '#container', {
+  $(document).pjax('[data-pjax] a, a[data-pjax]', '#container', {
     fragment:'#container',
     timeout: 2000
   });

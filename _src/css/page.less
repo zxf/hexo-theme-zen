@@ -1,3 +1,38 @@
+#header {
+  width: 1020px;
+  margin: 0px auto 20px auto;
+  .logo {
+    position: relative;
+    a {
+      color: @grey;
+      &:active {
+        color: @grey;
+      }
+    }
+    .logo-image {
+      height: 80px;
+      display: inline-block;
+    }
+    .logo-word {
+      font-size: 80px;
+      height: 80px;
+      display: inline-block;
+      text-align: center;
+      min-width: 80px;
+      padding: 5px;
+      padding-right: 40px;
+      font-weight: bold;
+    }
+    .logo-calendar {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: red;
+      height: 20px;
+      width: 40px;
+    }
+  }
+}
 #main {
   border:1px solid @black;
   padding:0px 20px;
