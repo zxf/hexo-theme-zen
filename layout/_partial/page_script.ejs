@@ -2,12 +2,28 @@
 <% if (!page.layout){ %>
 <script type="text/javascript">
   zen.calendar({
-    calendar: "<%= theme.header.logo.calendar %>",
     language: "<%= config.language %>",
+    calendar: "<%= theme.header.logo.calendar %>",
     imageElem: $("#header .logo-image"),
     wordElem: $("#header .logo-word"),
     calendarElem: $("#header .logo-calendar"),
-    seasonOptions: <%- JSON.stringify(theme.header.logo) %>
+    specialDayOptions: {},
+    seasonOptions: {
+      spring: {
+        color: "rgb(64,222,90)"
+        word: "春"
+      },
+      summer: {
+        word: "夏"
+      },
+      autumn: {
+        word: "秋"
+      },
+      winter: {
+        word: "冬"
+      }
+    },
+    defaultOptions: "<%- JSON.stringify(theme.header.logo) %>"
   });
 </script>
 <% } %>

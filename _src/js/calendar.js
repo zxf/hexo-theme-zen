@@ -3,8 +3,8 @@
 * Dependencies: jquery
 */
 zen.calendar = (function(zen){
-  var i18n = {};
-  var solarTerms = {};
+  var i18n = {},
+      solarTerms = {};
   var ggettext = function(language){
     var l = i18n[language] || {};
     return function(text){
@@ -12,7 +12,7 @@ zen.calendar = (function(zen){
     };
   };
 
-  var Timer = function(gettext){
+  var Dater = function(){
     var solarMonths = [
       "Jan",
       "Feb",
@@ -27,8 +27,6 @@ zen.calendar = (function(zen){
       "Nov",
       "Dec"
     ];
-    var solarTerms = [
-    ];
     var date;
     /*
     * solar terms
@@ -37,11 +35,11 @@ zen.calendar = (function(zen){
     this.getSolarTerm = function(){
       var y = date.getUTCFullYear(),
           m = date.getUTCMonth(),
-          d = date.getUTCDay();
+          d = date.getUTCDate();
       if(y in solarTerms) {
-        if(d < solarTerms[y][2 * m]){
-          return m ? 2 * m -1 : 23;
-        } else if(d >= solarTerms[y][2 * m + 1]){
+        if(d < (15 - (solarTerms[y][m] >> 4))){
+          return m ? 2 * m - 1 : 23;
+        } else if(d >= (15 + (solarTerms[y][m] & 0xF))){
           return 2 * m + 1;
         } else {
           return 2 * m;
@@ -57,12 +55,17 @@ zen.calendar = (function(zen){
     * 3:winter
     */
     this.getSeason = function(){
-      return Math.floor(this.getSolarTerm() / 6);
+      var s = this.getSolarTerm() - 5;
+      s = s < 0 ? s + 24 : s;
+      return Math.floor(s / 6);
     };
-    this.getSolarMonth = function(){
-      return gettext(solarMonths[date.getMonth()]);
+    this.getSpecialDay = function(){
+
     };
-    this.getLunarMonth = function(){
+    this.getSolarMonth = function(specialDay){
+        return solarMonths[date.getMonth()];
+    };
+    this.getLunarMonth = function(specialDay){
 
     };
     this.update = function(){
@@ -74,11 +77,12 @@ zen.calendar = (function(zen){
   /*
   * options: {
   *   calendar: solar | lunar,
-  *   language: 
-  *   imageElem: 
-  *   wordElem: 
-  *   calendarElem: 
+  *   language:
+  *   imageElem:
+  *   wordElem:
+  *   calendarElem:
   *   seasonOptions: {},
+  *   specialDayOptions: {},
   *   defaultOption: {}
   *}
   */
@@ -87,14 +91,28 @@ zen.calendar = (function(zen){
       calendar: "lunar",
       language: "en-US",
       seasonOptions: {},
+      specialDayOptions: {},
       defaultOption: {}
     }, options);
     var seasons = ["spring", "summer", "autumn", "winter"];
     var gettext = ggettext(options["language"]);
-    this.timer = new Timer(gettext);
-    this.setSeason = function(){
-      var season = seasons[this.timer.getSeason()];
-      var opts = options["seasonOptions"][season] || options["defaultOption"];
+    this.dater = new Dater();
+    
+    this.getSeason = function(){
+      return seasons[this.dater.getSeason()];
+    };
+
+    this.getMonth = function() {
+      if(options.calendar == "solar") {
+        return this.dater.getSolarMonth();
+      } else if (options.calendar == "lunar") {
+        return this.dater.getLunarMonth();
+      } else {
+        throw "Unsupported calendar " + options.calendar;
+      }
+    };
+
+    this.setSeason = function(opts){
       if(opts.image) {
         options["imageElem"].attr("src", opts.image);
       }
@@ -106,53 +124,52 @@ zen.calendar = (function(zen){
       }
     };
 
-    this.setCalendar = function(){
-      if(options.calendar == "solar") {
-        options["calendarElem"].text(this.timer.getSolarMonth());
-      } else if (options.calendar == "lunar") {
-        options["calendarElem"].text(this.timer.getLunarMonth());
-      } else {
-        throw "Unsupported calendar " + options.calendar;
-      }
+    this.setCalendar = function(m){
+      options["calendarElem"].text(gettext(m));
     };
 
+    this.init = function(){
+      var d = this.dater.getSpecialDay(),
+          seasonOptions = options["specialDayOptions"][d] || options[this.getSeason()] || options["defaultOption"],
+          calendarText = d === false ? this.getMonth() : d;
+      this.setSeason(seasonOptions);
+      this.setCalendar(calendarText);
+    };
   };
 
   var calendar = function(options){
     var c = new Calendar(options);
-    c.setSeason();
-    c.setCalendar();
+    c.init();
+  };
+
+  var defineSolarTerms = function(){
+    if(arguments.length > 1){
+      solarTerms[arguments[0]] = arguments[1];
+    } else {
+      $.extend(solarTerms, arguments[0]);
+    }
+  };
+
+  var defineSpecialDay = function(days){
+    days.forEach(function(day){
+
+    });
   };
 
   return $.extend(calendar, {
     i18n: function(language, translations){
-      i18n[language] = $.extend(i18n[language], translations);
-    },
-    solarTerms: function(){
-      if(arguments.length > 1){
-        solarTerms[arguments[0]] = arguments[1];
+      if(typeof translations == "string"){
+        i18n[translations] = i18n[translations] || {};
+        i18n[language] = i18n[translations];
       } else {
-        $.extend(solarTerms, arguments[0]);
+        i18n[language] = $.extend(i18n[language], translations);
       }
-    }
+    },
+    solarTerms: $.extend(defineSolarTerms, {
+      compile: function(d1, d2){
+        return ((15 - d1) << 4) + (d2 - 15);
+      }
+    })
   });
 })(zen);
 
-zen.calendar.solarTerms({
-  
-});
-
-zen.calendar.i18n("zh-CN", {
-  "Jan": "一月",
-  "Feb": "二月",
-  "Mar": "三月",
-  "Apr": "四月",
-  "May": "五月",
-  "Jun": "六月",
-  "Jul": "七月",
-  "Aug": "八月",
-  "Sep": "九月",
-  "Oct": "十月",
-  "Nov": "十一月",
-  "Dec": "十二月"
-});

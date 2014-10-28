@@ -9,27 +9,11 @@ header:
       #- image
       - word
       - calendar
-    spring:
-      color: "rgb(64,222,90)"
-      content: 
-      word: 春
-      image:
-    summer:
-      color:
-      content: 
-      word:
-      image:
-    autumn:
-      color:
-      content: 
-      word:
-      image:
-    winter:
-      color:
-      content: 
-      word:
-      image:
     calendar: solar
+    image:
+    color:
+    word:
+    content:
 
 #Search engine
 search: baidu

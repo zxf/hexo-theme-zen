@@ -10065,7 +10065,7 @@ zen.calendar = (function(zen){
     };
   };
 
-  var Timer = function(gettext){
+  var Dater = function(gettext){
     var solarMonths = [
       "Jan",
       "Feb",
@@ -10080,8 +10080,6 @@ zen.calendar = (function(zen){
       "Nov",
       "Dec"
     ];
-    var solarTerms = [
-    ];
     var date;
     /*
     * solar terms
@@ -10090,11 +10088,11 @@ zen.calendar = (function(zen){
     this.getSolarTerm = function(){
       var y = date.getUTCFullYear(),
           m = date.getUTCMonth(),
-          d = date.getUTCDay();
+          d = date.getUTCDate();
       if(y in solarTerms) {
-        if(d < solarTerms[y][2 * m]){
-          return m ? 2 * m -1 : 23;
-        } else if(d >= solarTerms[y][2 * m + 1]){
+        if(d < (15 - (solarTerms[y][m] >> 4))){
+          return m ? 2 * m - 1 : 23;
+        } else if(d >= (15 + (solarTerms[y][m] & 0xF))){
           return 2 * m + 1;
         } else {
           return 2 * m;
@@ -10110,7 +10108,10 @@ zen.calendar = (function(zen){
     * 3:winter
     */
     this.getSeason = function(){
-      return Math.floor(this.getSolarTerm() / 6);
+      console.log(this.getSolarTerm());
+      var s = this.getSolarTerm() - 5;
+      s = s < 0 ? s + 24 : s;
+      return Math.floor(s / 6);
     };
     this.getSolarMonth = function(){
       return gettext(solarMonths[date.getMonth()]);
@@ -10127,10 +10128,10 @@ zen.calendar = (function(zen){
   /*
   * options: {
   *   calendar: solar | lunar,
-  *   language: 
-  *   imageElem: 
-  *   wordElem: 
-  *   calendarElem: 
+  *   language:
+  *   imageElem:
+  *   wordElem:
+  *   calendarElem:
   *   seasonOptions: {},
   *   defaultOption: {}
   *}
@@ -10144,9 +10145,9 @@ zen.calendar = (function(zen){
     }, options);
     var seasons = ["spring", "summer", "autumn", "winter"];
     var gettext = ggettext(options["language"]);
-    this.timer = new Timer(gettext);
+    this.dater = new Dater(gettext);
     this.setSeason = function(){
-      var season = seasons[this.timer.getSeason()];
+      var season = seasons[this.dater.getSeason()];
       var opts = options["seasonOptions"][season] || options["defaultOption"];
       if(opts.image) {
         options["imageElem"].attr("src", opts.image);
@@ -10161,9 +10162,9 @@ zen.calendar = (function(zen){
 
     this.setCalendar = function(){
       if(options.calendar == "solar") {
-        options["calendarElem"].text(this.timer.getSolarMonth());
+        options["calendarElem"].text(this.dater.getSolarMonth());
       } else if (options.calendar == "lunar") {
-        options["calendarElem"].text(this.timer.getLunarMonth());
+        options["calendarElem"].text(this.dater.getLunarMonth());
       } else {
         throw "Unsupported calendar " + options.calendar;
       }
@@ -10177,23 +10178,208 @@ zen.calendar = (function(zen){
     c.setCalendar();
   };
 
+  var defineSolarTerms = function(){
+    if(arguments.length > 1){
+      solarTerms[arguments[0]] = arguments[1];
+    } else {
+      $.extend(solarTerms, arguments[0]);
+    }
+  };
+
   return $.extend(calendar, {
     i18n: function(language, translations){
-      i18n[language] = $.extend(i18n[language], translations);
-    },
-    solarTerms: function(){
-      if(arguments.length > 1){
-        solarTerms[arguments[0]] = arguments[1];
+      if(typeof translations == "string"){
+        i18n[translations] = i18n[translations] || {};
+        i18n[language] = i18n[translations];
       } else {
-        $.extend(solarTerms, arguments[0]);
+        i18n[language] = $.extend(i18n[language], translations);
       }
-    }
+    },
+    solarTerms: $.extend(defineSolarTerms, {
+      compile: function(d1, d2){
+        return ((15 - d1) << 4) + (d2 - 15);
+      }
+    })
   });
 })(zen);
 
-zen.calendar.solarTerms({
-  
-});
+
+(function(){
+  var defineSolarTerms = zen.calendar.solarTerms,
+      a = defineSolarTerms.compile(6, 21),
+      b = defineSolarTerms.compile(4, 19),
+      c = defineSolarTerms.compile(5, 21),
+      d = defineSolarTerms.compile(6, 22),
+      e = defineSolarTerms.compile(8, 23),
+      f = defineSolarTerms.compile(8, 24),
+      g = defineSolarTerms.compile(9, 24),
+      h = defineSolarTerms.compile(8, 22),
+      i = defineSolarTerms.compile(5, 19),
+      j = defineSolarTerms.compile(7, 22),
+      k = defineSolarTerms.compile(5, 20),
+      l = defineSolarTerms.compile(7, 21),
+      m = defineSolarTerms.compile(7, 23),
+      n = defineSolarTerms.compile(6, 20),
+      o = defineSolarTerms.compile(9, 23),
+      p = defineSolarTerms.compile(4, 20),
+      q = defineSolarTerms.compile(7, 24),
+      r = defineSolarTerms.compile(8, 21),
+      s = defineSolarTerms.compile(4, 18),
+      t = defineSolarTerms.compile(3, 18);
+  defineSolarTerms({
+    "1901": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1902": [a,i,a,a,d,j,f,f,f,g,e,e],
+    "1903": [a,k,j,a,j,j,f,g,g,g,e,e],
+    "1904": [l,k,a,k,a,d,m,e,e,f,e,j],
+    "1905": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1906": [a,i,a,a,d,d,f,f,f,g,e,e],
+    "1907": [a,k,j,a,j,j,f,g,g,g,e,e],
+    "1908": [l,k,a,k,a,d,m,e,e,g,e,j],
+    "1909": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1910": [a,i,a,a,d,d,f,f,f,g,e,e],
+    "1911": [a,k,j,a,j,j,f,g,g,g,e,e],
+    "1912": [l,k,a,k,a,d,m,e,e,g,e,j],
+    "1913": [n,b,a,c,d,d,e,f,f,g,e,h],
+    "1914": [a,b,a,c,d,d,f,f,f,g,e,e],
+    "1915": [a,k,d,a,d,j,f,f,g,g,e,e],
+    "1916": [a,k,a,k,a,d,m,e,e,f,h,j],
+    "1917": [n,b,a,c,a,d,e,f,e,g,e,j],
+    "1918": [a,b,a,c,d,d,f,f,f,g,e,h],
+    "1919": [a,k,d,a,d,j,f,f,g,g,e,e],
+    "1920": [a,k,a,k,a,d,m,e,e,f,h,j],
+    "1921": [n,b,a,k,a,d,e,f,e,g,e,j],
+    "1922": [a,b,a,c,d,d,f,f,f,g,e,h],
+    "1923": [a,i,a,a,d,j,f,f,g,g,e,e],
+    "1924": [a,k,a,k,a,d,m,e,e,f,h,j],
+    "1925": [n,b,a,k,a,d,e,f,e,g,e,j],
+    "1926": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1927": [a,i,a,a,d,j,f,f,f,g,e,e],
+    "1928": [a,k,a,k,a,a,m,e,e,e,j,j],
+    "1929": [n,b,a,k,a,d,m,e,e,f,h,j],
+    "1930": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1931": [a,i,a,a,d,j,f,f,f,g,e,e],
+    "1932": [a,k,a,k,a,a,m,e,e,e,j,j],
+    "1933": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1934": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1935": [a,i,a,a,d,d,f,f,f,g,e,e],
+    "1936": [a,k,a,k,a,a,m,e,e,e,j,j],
+    "1937": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1938": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1939": [a,i,a,a,d,d,f,f,f,g,e,e],
+    "1940": [a,k,a,k,a,a,m,e,e,e,j,j],
+    "1941": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1942": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1943": [a,i,a,a,d,d,f,f,f,g,e,e],
+    "1944": [a,k,a,k,c,a,m,e,e,e,j,j],
+    "1945": [n,b,a,k,a,d,m,e,e,f,h,j],
+    "1946": [n,b,a,c,d,d,e,f,e,g,e,h],
+    "1947": [a,b,a,c,d,d,f,f,f,g,e,e],
+    "1948": [a,k,c,k,c,a,m,m,e,e,j,j],
+    "1949": [k,b,a,k,a,d,m,f,e,f,h,j],
+    "1950": [n,b,a,k,a,d,e,f,e,g,e,h],
+    "1951": [a,b,a,c,d,d,f,f,f,g,e,e],
+    "1952": [a,k,c,k,c,a,m,m,e,e,j,j],
+    "1953": [k,b,a,k,a,d,m,e,e,f,h,j],
+    "1954": [n,b,a,k,a,d,e,f,e,o,e,j],
+    "1955": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1956": [a,k,k,k,c,a,m,m,e,e,j,j],
+    "1957": [k,b,a,k,a,d,m,e,e,f,h,j],
+    "1958": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1959": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1960": [a,i,k,k,c,a,m,m,m,e,j,j],
+    "1961": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "1962": [a,b,a,k,a,d,m,e,e,g,e,j],
+    "1963": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1964": [a,i,k,k,c,a,m,m,m,e,j,j],
+    "1965": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "1966": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1967": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1968": [a,i,k,k,c,c,m,m,m,e,j,j],
+    "1969": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "1970": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1971": [a,b,a,c,d,d,e,f,f,g,e,h],
+    "1972": [a,i,k,k,c,c,m,m,m,e,j,j],
+    "1973": [k,p,a,k,c,a,m,e,e,e,j,j],
+    "1974": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "1975": [a,b,a,c,d,d,e,f,e,g,e,h],
+    "1976": [a,i,k,p,c,c,m,q,m,e,j,j],
+    "1977": [k,b,a,k,a,a,m,m,e,e,j,j],
+    "1978": [n,b,a,k,a,d,m,e,e,f,e,j],
+    "1979": [a,b,a,c,a,d,e,f,e,g,e,h],
+    "1980": [a,i,k,p,c,c,m,m,m,e,j,j],
+    "1981": [k,b,a,k,c,a,m,m,e,e,h,j],
+    "1982": [n,b,a,k,a,d,m,e,e,f,h,j],
+    "1983": [n,b,a,k,a,d,e,f,e,g,e,h],
+    "1984": [a,b,k,p,c,c,j,m,m,e,j,j],
+    "1985": [k,b,c,k,c,a,m,m,e,e,j,j],
+    "1986": [k,b,a,k,a,d,m,e,e,f,h,j],
+    "1987": [n,b,a,k,a,d,m,f,e,g,e,j],
+    "1988": [a,b,k,p,c,c,j,m,m,e,j,l],
+    "1989": [k,b,k,k,c,a,m,m,m,e,j,j],
+    "1990": [k,b,a,k,a,a,m,e,e,f,h,j],
+    "1991": [n,b,a,k,l,d,m,e,e,g,e,j],
+    "1992": [a,b,k,p,c,c,j,m,m,e,j,l],
+    "1993": [k,s,k,k,c,a,m,m,m,e,j,j],
+    "1994": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "1995": [n,b,a,k,a,d,m,r,e,g,e,j],
+    "1996": [a,b,k,p,c,c,j,m,m,e,j,l],
+    "1997": [k,s,k,k,c,c,m,m,m,e,j,j],
+    "1998": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "1999": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "2000": [a,b,k,p,c,c,j,m,m,e,j,l],
+    "2001": [k,s,k,k,c,c,m,m,m,e,j,j],
+    "2002": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "2003": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "2004": [a,b,k,p,c,c,j,m,m,e,j,l],
+    "2005": [k,s,k,k,c,c,m,m,m,e,j,j],
+    "2006": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2007": [n,b,a,k,a,d,m,e,e,g,e,j],
+    "2008": [a,b,k,p,c,c,j,m,j,e,j,l],
+    "2009": [k,s,k,p,c,c,m,m,m,e,j,j],
+    "2010": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2011": [n,b,a,k,a,d,m,e,e,f,e,j],
+    "2012": [a,b,k,p,k,c,j,m,j,e,j,l],
+    "2013": [k,s,k,p,c,c,j,m,m,e,j,j],
+    "2014": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2015": [n,b,a,k,a,d,m,e,e,f,h,j],
+    "2016": [n,b,k,b,k,c,j,m,j,e,j,l],
+    "2017": [k,t,k,p,c,c,j,m,m,e,j,j],
+    "2018": [k,b,c,k,c,a,m,m,e,e,j,j],
+    "2019": [k,b,a,k,a,a,m,e,e,f,h,j],
+    "2020": [n,b,k,b,k,c,d,j,j,e,j,l],
+    "2021": [k,t,k,p,c,c,j,m,m,e,j,l],
+    "2022": [k,b,k,k,c,a,m,m,m,e,j,j],
+    "2023": [k,b,a,k,a,a,m,e,e,f,h,j],
+    "2024": [n,b,k,b,k,c,d,j,j,e,j,a],
+    "2025": [k,t,k,p,c,c,j,m,m,e,j,l],
+    "2026": [k,s,k,k,c,c,m,m,m,e,j,j],
+    "2027": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "2028": [n,b,k,b,k,c,d,j,j,e,j,a],
+    "2029": [k,t,k,p,c,c,j,m,m,e,j,l],
+    "2030": [k,s,k,k,c,c,m,m,m,e,j,j],
+    "2031": [k,b,a,k,a,a,m,e,e,e,j,j],
+    "2032": [n,b,k,b,k,c,d,j,j,e,j,a],
+    "2033": [k,t,k,p,c,c,m,m,m,e,j,l],
+    "2034": [k,s,k,k,c,c,m,e,m,e,j,j],
+    "2035": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2036": [n,b,k,b,k,c,d,j,j,e,j,a],
+    "2037": [k,t,k,p,c,c,j,m,m,e,j,l],
+    "2038": [k,s,k,k,c,c,m,m,m,e,j,j],
+    "2039": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2040": [n,b,k,b,k,c,d,j,j,e,j,a],
+    "2041": [k,t,k,p,k,c,j,m,j,e,j,l],
+    "2042": [k,s,k,p,c,c,m,m,m,e,j,j],
+    "2043": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2044": [n,b,k,b,k,c,d,j,j,m,j,a],
+    "2045": [k,t,k,b,k,c,j,m,j,e,j,l],
+    "2046": [k,s,k,p,c,c,j,m,m,e,j,j],
+    "2047": [k,b,a,k,c,a,m,m,e,e,j,j],
+    "2048": [n,b,k,b,k,k,d,j,j,m,l,a],
+    "2049": [i,t,k,k,k,c,d,j,j,e,j,l],
+    "2050": [k,t,k,p,c,c,j,m,e,e,j,j] 
+  });
+})();
+
 
 zen.calendar.i18n("zh-CN", {
   "Jan": "一月",
@@ -10210,7 +10396,13 @@ zen.calendar.i18n("zh-CN", {
   "Dec": "十二月"
 });
 
+zen.calendar.i18n("zh-TW", "zh-CN");
+/*
+* anas
+*/
+zen.ana = (function(zen){
 
+})(zen);
 $(function(){
   $(document).pjax('[data-pjax] a, a[data-pjax]', '#container', {
     fragment:'#container',

@@ -7,6 +7,8 @@ module.exports = function(grunt){
           '_lib/jquery-pjax/jquery.pjax.js',
           '_src/js/base.js',
           '_src/js/calendar.js',
+          '_src/js/calendar.data.js',
+          '_src/js/calendar.i18n.js',
           '_src/js/ana.js',
           '_src/js/ready.js'
         ],
